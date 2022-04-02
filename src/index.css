@@ -12,3 +12,122 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.main-container {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1;
+}
+
+.config-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.titulo-config {
+  font-family: Roboto, sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.session-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.session-display {
+  height: 50px;
+  background-color: black;
+  user-select: none;
+}
+
+.session-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.break-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.break-display {
+  height: 50px;
+  background-color: black;
+  user-select: none;
+}
+
+.break-control {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.timer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.titulo-timer {
+  font-family: Roboto, sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.timer-cont-display {
+  display: flex;
+  flex-direction: column;
+}
+
+.control-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.titulo-control {
+  font-family: Roboto, sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.ctrl-btn-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.time-set {
+  font-family: Roboto, sans-serif;
+  font-size: 20px;
+  color: white;
+  background-color: black;
+}
+
+#session-increment {
+  cursor: pointer;
+  user-select: none;
+}
+
+#session-decrement {
+  cursor: pointer;
+  user-select: none;
+}
+
+#break-increment {
+  cursor: pointer;
+  user-select: none;
+}
+
+#break-decrement {
+  cursor: pointer;
+  user-select: none;
+}

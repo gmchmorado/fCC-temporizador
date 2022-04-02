@@ -1,7 +1,7 @@
 # Temporizador de trabajo 25+5
 ---
 ## Requerimiento
-Codificar una aplicación de cuenta atras para un tiempo de trabajo de 25 minutos y 5 minutos de descanso
+Codificar una aplicación de cuenta atrás para un tiempo de trabajo de 25 minutos y 5 minutos de descanso
 
 ---
 ## Elementos de evaluación
@@ -23,13 +23,13 @@ Codificar una aplicación de cuenta atras para un tiempo de trabajo de 25 minuto
 - Cuando se hace clic en el elemento `session-increment` el valor de `session-length` se deberá aumentar en 1 y actualizar el valor.
 - Ningun valor de los temporizadores deberá poder ser menor que 0.
 - Ningun valor de los temporizadores deberá ser mayor de 60.
-- Cuando se hace clic por primera vez en el elemento `start_stop`, el temporizador deberá iniciar la cuenta atras de la sesión de trabajo, mostrando en el elemento `time-left` el tiempo restante en el formato `mm:ss`, reduciendo en 1 segundo cada 1000ms.
-- Si existe una cuenta atras, al hacer clic en el elemento `start_stop` deberá pausarse el temporizador.
+- Cuando se hace clic por primera vez en el elemento `start_stop`, el temporizador deberá iniciar la cuenta atrás de la sesión de trabajo, mostrando en el elemento `time-left` el tiempo restante en el formato `mm:ss`, reduciendo en 1 segundo cada 1000ms.
+- Si existe una cuenta atrás, al hacer clic en el elemento `start_stop` deberá pausarse el temporizador.
 - Si el temporizador está pausado y se hace clic en elemento `start_stop` deberá reanudarse la cuenta desde el punto en que fue pausado.
-- Cuando la cuenta atras de la sesión llega a cero deberá iniciar la cuenta atras del tiempo de espera; el elemento `timer-label` deberá mostrar la cadena que indica la pausa ("break") que ha comenzado.
-- Cuando la cuenta atras de la sesión llega a cero deberá iniciar la cuenta atras del tiempo de espera iniciando con el valor del elemento `break-length`.
-- Cuando la cuenta atras de descanso llega a cero deberá iniciar la cuenta atras del tiempo de sesión; el elemento `timer-label` deberá mostrar la cadena que indica la sesión ("session") que ha comenzado.
-- Cuando la cuenta atras de descanso llega a cero deberá iniciar la cuenta atras del tiempo de espera iniciando con el valor del elemento `session-length`.
+- Cuando la cuenta atrás de la sesión llega a cero deberá iniciar la cuenta atrás del tiempo de espera; el elemento `timer-label` deberá mostrar la cadena que indica la pausa ("break") que ha comenzado.
+- Cuando la cuenta atrás de la sesión llega a cero deberá iniciar la cuenta atrás del tiempo de espera iniciando con el valor del elemento `break-length`.
+- Cuando la cuenta atrás de descanso llega a cero deberá iniciar la cuenta atrás del tiempo de sesión; el elemento `timer-label` deberá mostrar la cadena que indica la sesión ("session") que ha comenzado.
+- Cuando la cuenta atrás de descanso llega a cero deberá iniciar la cuenta atrás del tiempo de espera iniciando con el valor del elemento `session-length`.
 - Cuando alguno de los temporizadores llegue a cero, deberá reproducirse un sonido que indica que el tiempo ha concluido. Se deberá usar un elemento con etiqueta HTML5 `<audio></audio>` y tener `id = 'beep'`
 - El audio seberá ser de 1 segundo o mayor.
 - El audio derará de reproducirse y se reiniciará al hacer clic en el elemento `reset`.
@@ -37,3 +37,24 @@ Codificar una aplicación de cuenta atras para un tiempo de trabajo de 25 minuto
 ---
 ## Lógica de Diseño
 
+1. El tiempo debe ser aceptado en número entero de 1 a 60 como límites, este valor será considerado en minutos; para conocer el tiempo restante a este tiempo se le restará el tiempo transcurrido.
+1. Se contempla que exista un "state" que represente la situación del temporalizador, el estado inicial = `reset`, cuenta atrás = `iniciado`, detenido antes de finalizar = `pausado`.
+1. El "state" anterior se actualizará cuando se haga clic en el elemento `start_stop`.
+1. El ciclo sería: al cargar la aplicación el temporalizador estaría detenido con estado `reset`; al actival el elemento `start_stop` iniciaría con el temporizador y el estado cambiaría a `iniciado`; si concluyera la cuenta atrás, el estado cambiaría nuevamente a `reset`; si el elemento `start_stop` fuerá activado durante la cuenta atrás esté en desarrollo, detendría la cuenta, manteniendo el tiempo restante detenido y el estado cambiaría a `pausado`; si nuevamente se activara el elemento `start_stop` la cuenta sería reiniciada desde el punto en que se detuvo y el estado regresaría a `iniciado`; al concluir la cuenta atrás el estado regresará a `reset`.
+1. El manejo de los temporizadores correspondería a lo siguiente: al iniciar la aplicación los dos temporizadores estarían detenidos, un "state" definiría cual de ellos debería iniciar la cuenta atrás al actuar el elemento `start_stop` (al inicio sería `session` el valor del estado); si concluye un temporizador, se revisará el estado y si es `session` iniciará nuevamente el temporizador cambiando el estado a `break`; al terminar el temporizador con estado `break` no iniciará nuevamente pero el estado cambiará a `session`.
+1. De lo anterior se deduce que sólo existirá un componente temporizador mismo que tomará la información de alguna de las caracterisitas definidas para el tiempo de trabajo (`session`) o de descanso (`break`).
+1. De forma similar, los métodos para incrementar o decrementar los valores del tiempo de duración serán sólo un componenete que eligira en función de los argumentos (propiedades) o etiquetas.
+1. La notificación por sonido aplicará de una forma similar, entendiendo que sólo será un sonido.
+
+---
+
+### Componenetes
+
+Contemplo la elaboración de 7 componentes para la aplicación:
+- Para incrementar el tiempo
+- Para decrementar el tiempo
+- Para mostrar el tiempo programado
+- Para mostrar que temporizador esta funcionando
+- Para mostrar la cuenta atrás
+- Para controlar el inicio y pausa de la cuenta
+- Para controlar el reinicio
