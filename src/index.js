@@ -9,53 +9,54 @@ Root.render(
   <App />
 );
 
-/*
-function cuentaAtras(segundos) {
-  let contador = segundos;
-  
-  const intervalo = setInterval(() => {
-    console.log(contador);
-    contador --;
-    if (contador < 0) {
-      clearInterval(intervalo);
-      console.log('Ding!');
-    }
-  }, 1000);
-}
-*/
-
 function App() {
   
   const [activeTimer, setActiveTimer] = useState('session');    //Estado que define el timer activo
   const [timerState, setTimerState] = useState(0);              //Estado que define si el timer esta activo (1) o inavtivo (0)
-  const [tiempoAtras,setTiempoAtras] = useState(0);            //Estado que da seguimiento a la cuenta atrás
-  const [timeSetSession, setTimeSetSession] = useState(2);      //Estado que define el tiempo inicial del timer de trabajo
-  const [timeSetBreak, setTimeSetBreak] = useState(1);          //Estado que define el tiempo inicial del timer de descanso
+  const [tiempoAtras,setTiempoAtras] = useState(0);             //Estado que da seguimiento a la cuenta atrás
+  const [timeSetSession, setTimeSetSession] = useState(25);     //Estado que define el tiempo inicial del timer de trabajo
+  const [timeSetBreak, setTimeSetBreak] = useState(5);          //Estado que define el tiempo inicial del timer de descanso
 
   //en el ejemplo esta es renders
   const cuentaAtras = useRef(0);                                //Será la forma de actualizar el contador en cada renderizado
   const timerId = useRef();                                     //Almacena la referencia a la función setInterval para poder cerrarla
+  const alarma = document.getElementById('beep');
 
-  const startTimer = () => {
+  const startTimerSession = () => {
     timerId.current = setInterval(() => {
-      cuentaAtras.current--;
       setTiempoAtras(cuentaAtras.current);
-      console.log(`startTimer() cuentaAtras = ${cuentaAtras.current}`);
-      if (cuentaAtras.current <= 0) {
-        console.log(`Cerrado desde startTimer`);
+      cuentaAtras.current--;
+      if (cuentaAtras.current < 0) {
+        alarma.play();                                          //beep
         clearInterval(timerId.current);
+        cuentaAtras.current = timeSetBreak*60;
+        setActiveTimer('break');
+        startTimerBreak();
+      }
+    },1000);
+  }
+
+  const startTimerBreak = () => {
+    timerId.current = setInterval(() => {
+      setTiempoAtras(cuentaAtras.current);
+      cuentaAtras.current--;
+      if (cuentaAtras.current < 0) {
+        alarma.play();                                          //beep
+        clearInterval(timerId.current);
+        cuentaAtras.current = timeSetSession*60;
+        setActiveTimer('session');
+        startTimerSession();
       }
     },1000);
   }
 
   const stopTimer = () => {
-    console.log(`Pausado por stopTimer`);
     clearInterval(timerId.current);
     timerId.current = 0;
   }
 
   const resetTimer = () => {
-    console.log(`Pausado por stopTimer`);
+    alarma.play();                                              //beep
     clearInterval(timerId.current);
     timerId.current = 0;
     setTimerState(0);
@@ -66,16 +67,18 @@ function App() {
 
   const controlTimer = () => {
     if (timerState === 0) {
-      console.log(`controlTimer(1) cuentaAtras = ${cuentaAtras.current}, timerState = ${timerState}`);
-      setTimerState(1);
-      cuentaAtras.current = (cuentaAtras.current === 0) ? (activeTimer === 'session' ? timeSetSession*60 : timeSetBreak*60) : cuentaAtras.current;
-      console.log(`controlTimer(2) cuentaAtras = ${cuentaAtras.current}, timerState = ${timerState}`);
-      startTimer();
+      if (activeTimer === 'session') {
+        setTimerState(1);
+        cuentaAtras.current = (cuentaAtras.current === 0) ? timeSetSession*60 : cuentaAtras.current;
+        startTimerSession();
+      } else {
+        setTimerState(1);
+        cuentaAtras.current = (cuentaAtras.current === 0) ? timeSetBreak*60 : cuentaAtras.current;
+        startTimerBreak();
+      }
     } else {
-      console.log(`controlTimer(1) cuentaAtras = ${cuentaAtras.current}, timerState = ${timerState}`);
       setTimerState(0);
       stopTimer();
-      console.log(`controlTimer(2) cuentaAtras = ${cuentaAtras.current}, timerState = ${timerState}`);
     }
   }
 
@@ -115,6 +118,11 @@ function App() {
         <div className='titulo-config'>
           Configuración
         </div>
+        <div 
+          className='label-session' 
+          id='session-label'>
+          Trabajo
+        </div>
         <div className='session-container'>
           <div className='session-display'>
             <TimeSet 
@@ -132,6 +140,11 @@ function App() {
               clickHandel={decTimeSetSession} 
             />
           </div>
+        </div>
+        <div 
+          className='label-session' 
+          id='break-label'>
+          Descanso
         </div>
         <div className='break-container'>
           <div className='break-display'>
@@ -160,7 +173,7 @@ function App() {
           <TimerLabel 
             activeLabel={activeTimer} />
           <TimeLeft 
-            muestraCuenta={minutosSegundos(tiempoAtras)}/>
+            muestraCuenta={minutosSegundos((timerState === 0 && cuentaAtras.current === 0) ? timeSetSession*60 : tiempoAtras)}/>
         </div>
       </div>
       <div className='control-container'>
@@ -177,6 +190,11 @@ function App() {
             clickHandel={resetTimer}/>
         </div>
       </div>
+      <audio
+          id="beep"
+          preload="auto"
+          src="https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav"
+        />
     </div>
   )
 }
@@ -192,7 +210,7 @@ function TimeSet(props) {
 function Incrementa(props) {
   return(
     <span 
-      className="material-icons" 
+      className="material-icons arrows" 
       id={`${props.timerType}-increment`}
       onClick={() => props.clickHandel()}>
       arrow_upward
@@ -203,7 +221,7 @@ function Incrementa(props) {
 function Decrementa(props) {
   return(
     <span 
-      className="material-icons"
+      className="material-icons arrows"
       id={`${props.timerType}-decrement`}
       onClick={() => props.clickHandel()}>
       arrow_downward
@@ -231,6 +249,7 @@ function StartStop(props) {
   return(
     <button 
       id='start_stop' 
+      className='botones' 
       onClick={() => props.clicControl()}>
       {props.estadoDelTimer === 0 ? 'Start' : 'Stop'}
     </button>
@@ -241,6 +260,7 @@ function Reset(props) {
   return(
     <button 
       id='reset' 
+      className='botones' 
       onClick={() => props.clickHandel()}>
       {'Reset'}
     </button>

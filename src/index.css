@@ -1,6 +1,7 @@
 body {
   margin: 0;
   padding: 0;
+  background-color: midnightblue;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -12,10 +13,23 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-.main-container {
+
+#root {
+  height: 100vh;
+  width: 100vw;
   display: flex;
   flex-direction: row;
-  flex: 1 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-container {
+  width: 75%;
+  height: 80vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
 .config-container {
@@ -23,48 +37,92 @@ code {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 80vh;
+  width: 33%;
 }
 
 .titulo-config {
   font-family: Roboto, sans-serif;
-  font-size: 20px;
+  font-size: 30px;
   font-weight: bold;
+  color: white;
+  height: 20vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .session-container {
+  height: 25vh;
+  width: 100%;
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.label-session {
+  height: 5vh;
+  display: flex;
+  align-items: flex-end;
+  font-family: Roboto, sans-serif;
+  font-weight: bold;
+  color: white;
 }
 
 .session-display {
-  height: 50px;
+  height: 100px;
+  width: 150px;
   background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   user-select: none;
 }
 
 .session-control {
+  height: 100px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  font-size: 40px;
+  color: white;
+  background-color: black;
+}
+
+.arrows:hover {
+  background-color: brown;
 }
 
 .break-container {
+  height: 25vh;
+  width: 100%;
   display: flex;
   flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
 .break-display {
-  height: 50px;
+  height: 100px;
+  width: 150px;
   background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   user-select: none;
 }
 
 .break-control {
+  height: 100px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  font-size: 40px;
+  color: white;
+  background-color: black;
 }
 
 .timer-container {
@@ -72,17 +130,27 @@ code {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 80vh;
+  width: 34%;
 }
 
 .titulo-timer {
   font-family: Roboto, sans-serif;
-  font-size: 20px;
+  font-size: 30px;
   font-weight: bold;
+  color: white;
+  height: 20vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .timer-cont-display {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
 }
 
 .control-container {
@@ -90,26 +158,55 @@ code {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 80vh;
+  width: 33%;
+}
+
+#timer-label {
+  font-family: Roboto, sans-serif;
+  font-size: 60px;
+  color: white;
+}
+
+#time-left {
+  font-family: Roboto, sans-serif;
+  font-size: 150px;
+  color: white;
 }
 
 .titulo-control {
   font-family: Roboto, sans-serif;
-  font-size: 20px;
+  font-size: 30px;
   font-weight: bold;
+  color: white;
+  height: 20vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .ctrl-btn-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
+  height: 60vh;
 }
 
 .time-set {
   font-family: Roboto, sans-serif;
-  font-size: 20px;
+  font-size: 40px;
   color: white;
   background-color: black;
+}
+
+.botones {
+  height: 100px;
+  width: 150px;
+  font-family: Roboto, sans-serif;
+  font-size: 40px;
+  cursor: pointer;
+  user-select: none;
 }
 
 #session-increment {
